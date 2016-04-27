@@ -1,0 +1,5 @@
+*.pbuf
+*.conf
+*.swp
+*.class
+mapper-reducer.jar

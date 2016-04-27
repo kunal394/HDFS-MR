@@ -1,0 +1,76 @@
+syntax = "proto2";
+
+option java_outer_classname = "MRProtos";
+option java_package = "com.distributed.systems";
+
+message JobSubmitRequest {
+  optional string mapperName = 1; // Java class, or name of C .so
+  optional string reducerName = 2; // Java class, or name of C .so
+  optional string inputFile = 3;
+  optional string outputFile = 4;
+  optional int32 numReduceTasks = 5;
+}
+
+message JobSubmitResponse {
+  optional int32 status = 1;
+  optional int32 jobId = 2;
+}
+
+message JobStatusRequest {
+  optional int32 jobId = 1;
+}
+
+message JobStatusResponse {
+  optional int32 status = 1;
+  optional bool jobDone = 2;
+  optional int32 mapTasksInToProcess = 3;
+  optional int32 mapTasksInProcessing = 4;
+  optional int32 mapTasksInCompleted = 5;
+  optional int32 reduceTasksInToProcess = 6;
+  optional int32 reduceTasksInProcessing = 7;
+  optional int32 reduceTasksInCompleted = 8;
+}
+
+message MapTaskStatus {
+  optional int32 jobId = 1;
+  optional int32 taskId = 2;
+  optional bool taskCompleted = 3;
+  optional string mapOutputFile = 4;
+}
+
+message ReduceTaskStatus {
+  optional int32 jobId = 1;
+  optional int32 taskId = 2;
+  optional bool taskCompleted = 3;
+}
+
+message HeartBeatRequest {
+  optional int32 taskTrackerId = 1;
+  optional int32 numMapSlotsFree = 2;
+  optional int32 numReduceSlotsFree = 3;
+  optional string taskTrackerIp =4;
+  repeated MapTaskStatus mapStatus = 5;
+  repeated ReduceTaskStatus reduceStatus = 6;
+}
+
+message MapTaskInfo {
+  optional int32 jobId = 1;
+  optional int32 taskId = 2;
+  optional string mapperName = 3;
+  optional int32 blockNumber = 4;
+  optional string ip = 5; 
+}
+
+message ReducerTaskInfo {
+  optional int32 jobId = 1;
+  optional int32 taskId = 2;
+  optional string reducerName = 3;
+  optional string mapOutputFile = 4;
+  optional string outputFile = 5;
+}
+
+message HeartBeatResponse {
+  optional int32 status = 1;
+  repeated MapTaskInfo mapTasks = 2;
+  repeated ReducerTaskInfo reduceTasks = 3;
+}
